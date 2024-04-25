@@ -19,7 +19,7 @@ const app = {
     });
   },
 
-  // ouvrir une modale
+  // ouvrir une modale pour créer une liste
   showAddListModal() {
     const addModal = document.getElementById('addListModal');
     addModal.classList.add('is-active');
@@ -48,6 +48,7 @@ const app = {
     app.makeListInDOM();
   },
 
+  // création de liste à partir d'un clone du template
   makeListInDOM() {
     console.log(app.newData);
     const cardContainer = document.querySelector('.card-lists');
