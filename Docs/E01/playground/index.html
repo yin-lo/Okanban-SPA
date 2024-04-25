@@ -4,11 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>o'Delice</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css"
+    />
     <script defer src="./index.js"></script>
   </head>
   <body>
     <!-- Title -->
-    <h1 class="">Mon panier o'Delice</h1>
+    <h1 id="mon-titre" class="titre-v2">Mon panier o'Delice</h1>
 
     <!-- List container -->
     <div id="fruits-container"></div>
@@ -17,5 +21,28 @@
     <button class="button is-info" id="add-fruit-button">
       Ajouter un fruit
     </button>
+
+    <form action="" class="modal-card-body">
+      <label for="">Nom</label>
+      <input type="text" name="name" />
+      <label for="">Prix</label>
+      <input type="text" name="price" />
+      <label for="">Quantité</label>
+      <input type="text" name="quantity" />
+      <input type="submit" value="Sauvegarder" />
+    </form>
+
+    <template id="fruit-template">
+      <article class="card" data-card-id slot="fruit">
+        <h2 class="card-title" slot="fruit-name">Nom du fruit</h2>
+        <footer class="card-footer">
+          <p class="card-footer-item" slot="fruit-quantity">Quantité : 3</p>
+          <p class="card-footer-item" slot="fruit-unit-price">
+            Prix à l'unité : 3€
+          </p>
+          <!-- Avec les data-attributes qui ne sont pas vraiment fait pour ça, ça fonctionne aussi -->
+        </footer>
+      </article>
+    </template>
   </body>
 </html>
