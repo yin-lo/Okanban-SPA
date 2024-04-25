@@ -76,7 +76,7 @@ C'est le moment de coder la méthode `app.makeListInDOM`. Cette méthode doit cr
 
 On pourrait utiliser `document.createElement`, mais on va vite avoir un problème : on a un sacré paquet d'éléments à créer, ça va prendre un temps fou à écrire !
 
-Heureusement, HTML nous propose un système pour pallier ce souci : les [template](https://developer.mozilla.org/fr/docs/Web/HTML/Element/template).
+Heureusement, HTML nous propose un système pour pallier ce souci : les [templates](https://developer.mozilla.org/fr/docs/Web/HTML/Element/template).
 
 Commence par créer un template dans le HTML, en copiant le contenu d'une des liste déjà présente, et donne lui un id explicite.
 
@@ -84,7 +84,7 @@ Dans la méthode `app.makeListInDOM`, il faut ensuite :
 
 - Récupérer le template, puis le cloner dans une variable (cf [cette doc](https://developer.mozilla.org/fr/docs/Web/Web_Components/Utilisation_des_templates_et_des_slots) ).
 - Grâce à `maListe.querySelector`, mettre à jour le nom de la liste.
-- Insérer la nouvelle liste en première dans le DOM, devant toute les autres ! (sers toi par exemple de [la méthode before](https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/before) ).
+- Insérer la nouvelle liste en première dans le DOM, devant toutes les autres ! (sers toi par exemple de [la méthode before](https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/before) ).
 
 *Note* : rien ne t'empêche de rajouter des classes ou des identifiants dans le HTML pour te faciliter la vie...
 
