@@ -1,3 +1,74 @@
+
+# oKanban-front, jour 2
+
+## Dynamic data !
+
+C'est l'heure de brancher notre application sur les vrais données !
+
+#### Supprimer les fausses listes et les fausses cartes
+
+Maintenant qu'on a nos méthodes prêtes à l'emploi, tu peux enlever toutes les listes codées en dur dans index.html !
+
+#### Récupérer les vraies listes
+
+Commence par ajouter une propriété `base_url` dans app. Sa valeur est l'url "de base" de ton API oKanban !
+
+Crée ensuite une méthode `getListsFromAPI` dans app. Pour faciliter la suite, cette fonction est `async`.
+
+Dans cette méthode, utilise [fetch](https://developer.mozilla.org/fr/docs/Web/API/Fetch_API/Using_Fetch) pour appeller la route "GET /lists" de l'api.
+
+Utilise le résultat de la requête fetch, ainsi que les fonctions développées hier, pour créer les vraies listes dans le DOM !
+
+<details>
+<summary>De l'aide</summary>
+
+Il faut `await` la réponse de fetch, mais il faut aussi `await response.json()` pour récupérer les données!  
+</details>
+
+#### Mise à jour des détails
+
+Modifie les méthodes de app pour que l'attribut "data-list-id" des listes soit correct et corresponde aux données de l'API.
+
+## Des listes c'est bien, mais avec des cartes c'est mieux !
+
+Met en place le même principe que précedemment, pour afficher les vraies cartes !
+
+D'ailleurs il se pourrait bien que tu les ais déjà récupérées... je dis ça, je dis rien !
+
+Au passage, il faut modifier `app.makeCardInDOM` pour changer l'attribut "data-card-id" des cartes, et aussi leur donner un "background-color" qui correspond !
+
+## Save it baby !
+
+Modifie les méthodes `handleAddListForm` et `handleAddCardForm` :
+- Ces méthodes doivent être async.
+- Utilise fetch pour appeler les routes POST en envoyant les données du formulaire.
+- Utilise la réponse de fetch pour créer les listes/cartes, ou afficher une erreur (avec `alert`) si besoin.
+- Pense à tester le code de retour avec `response.status` (il DOIT être égal à 200, sinon on a une erreur).
+
+#### pourquoi j'ai pas de données ?!
+
+Tu as beau envoyer des données, rien n'apparrait côté back. C'est probablement dû au format dans lequel tu envoie les données !
+
+En effet, FormData utilise le format `multipart/form-data`. Or, ce format n'est pas géré par Express !
+
+Il faut rajouter un middleware dans l'api : [multer](https://github.com/expressjs/multer).
+
+<details>
+<summary>De l'aide pour multer</summary>
+
+```js
+const multer = require('multer');
+const bodyParser = multer();
+
+// on utlise .none() pour dire qu'on attends pas de fichier, uniquement des inputs "classiques" !
+app.use( bodyParser.none() );
+```
+</details>
+
+---
+
+
+
 # oKanban-front, jour 1
 
 ## Static force
