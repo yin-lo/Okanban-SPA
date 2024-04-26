@@ -5,29 +5,29 @@ const app = {
     const buttonAddModal = document.getElementById('addListButton');
     buttonAddModal.addEventListener('click', app.showAddListModal);
 
-    // fermer une modale
-    const buttonCloseModal = document.querySelectorAll('.close');
-    buttonCloseModal.forEach((button) => {
+    // fermer une modale (plusieurs boutons close)
+    const buttonsCloseModal = document.querySelectorAll('.modal .close');
+    buttonsCloseModal.forEach((button) => {
       button.addEventListener('click', app.hideModals);
     });
 
     // récupérer formulaire ajout d'une liste
     const listForm = document.querySelector('#addListForm');
-    listForm.addEventListener('submit', (event) => {
-      event.preventDefault();
-      app.handleAddListFrom(event.target);
-    });
+    listForm.addEventListener('submit', app.handleAddListFrom);
 
     // récupérer formulaire ajout d'une carte
     const cardForm = document.querySelector('#addCardForm');
-    cardForm.addEventListener('submit', (event) => {
-      event.preventDefault();
-      app.handleAddCardFrom(event.target);
+    cardForm.addEventListener('submit', app.handleAddCardFrom);
+
+    // bouton " + " pour ajouter une carte
+    const buttonsAddCardToList = document.querySelectorAll('.panel .icon');
+    buttonsAddCardToList.forEach((buttonAddCard) => {
+      buttonAddCard.addEventListener('click', app.showAddCardModal);
     });
   },
 
-  // bouton plus pour ajouter une carte
-  addListenerOnPlusButtons() {
+  // bouton " + " pour ajouter une carte (refait au-dessus)
+  /*   addListenerOnPlusButtons() {
     const plusButtons = document.querySelectorAll('.is-pulled-right');
 
     plusButtons.forEach((plusButton) => {
@@ -35,7 +35,7 @@ const app = {
         app.showAddCardModal(event.target);
       });
     });
-  },
+  }, */
 
   // ouvrir une modale pour créer une liste
   showAddListModal() {
@@ -47,8 +47,9 @@ const app = {
   showAddCardModal(target) {
     const addModal = document.getElementById('addCardModal');
     addModal.classList.add('is-active');
-    const targetList = target.closest('.panel');
+    const targetList = target.closest('.panel'); // closest remonte sur le parent ayant la classe spécifiée (fonctionne avec event.target [si event en paramètre] )
     const listId = targetList.dataset.listId;
+    // récupère l'input caché :
     document.querySelector('input[name="list_id"]').value = listId;
   },
 
@@ -61,59 +62,64 @@ const app = {
   },
 
   // récupérer formulaire ajout d'une liste
-  newData: [],
-
   handleAddListFrom(event) {
-    const formData = new FormData(event);
-    app.newData.length = 0;
-    formData.forEach((value, key) => {
-      app.newData.push({ [key]: value });
-    });
+    event.preventDefault();
+    const formData = new FormData(event.target);
 
-    app.makeListInDOM();
+    // afficher la liste dans le DOM
+    app.makeListInDOM(formData);
+
+    // fermer la modale
+    app.hideModals();
+
+    // reset le formulaire
+    event.target.reset();
   },
 
   // récupérer form ajout d'une carte
   handleAddCardFrom(event) {
-    const formData = new FormData(event);
-    app.newData.length = 0;
-    formData.forEach((value, key) => {
-      app.newData.push({ [key]: value });
-    });
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const listId = formData.get('list_id');
 
-    app.makeCardInDOM();
+    app.makeCardInDOM(formData, listId);
+    app.hideModals();
+    event.target.reset();
   },
 
   // création de liste à partir d'un clone du template
-  makeListInDOM() {
-    const cardContainer = document.querySelector('.card-lists');
+  makeListInDOM(datas) {
+    // récupérer le template et le cloner
     const listTemplate = document.getElementById('list-template');
+    const listClone = document.importNode(listTemplate.content, true);
 
-    app.newData.forEach((list) => {
-      const listClone = document.importNode(listTemplate.content, true);
-      listClone.querySelector('[slot="list-name"]').textContent = list.name;
+    // données que l'on veut rendre dynamique
+    // dataset associe des données à des éléments html
+    listClone.querySelector('.panel').dataset.listId = crypto.randomUUID();
+    // autre possibilité :
+    // const randomNumber = Math.round(Math.random() * 5000);
+    // listClone.querySelector('.panel').id = `list-${randomNumber}`;
+    listClone.querySelector('[slot="list-title"]').textContent = datas.get('title');
 
-      listClone.querySelector('.panel').dataset.listId = crypto.randomUUID();
+    // balise parent où sera mis la liste
+    const listContainer = document.querySelector('.card-lists');
 
-      cardContainer.prepend(listClone);
-      const inputName = document.querySelector('[name="name"]');
-      inputName.value = '';
+    // ajout de l'écouteur pour ouvrir l'ajout d'une carte :
+    listClone.querySelector('.icon').addEventListener('click', app.showAddCardModal);
 
-      app.addListenerOnPlusButtons();
-
-      app.hideModals();
-    });
+    listContainer.prepend(listClone);
   },
 
   // création de cartes à partir d'un clone du template
-  makeCardInDOM() {
-    console.log(app.newData);
-    const cardContainer = document.querySelector(`[data-list-id='${app.newData[1].list_id}'] .panel-block`);
+  makeCardInDOM(datas, id) {
     const cardTemplate = document.getElementById('card-template');
 
     const cardClone = document.importNode(cardTemplate.content, true);
-    cardClone.querySelector('[slot="card-name"]').textContent = app.newData[0].name;
+    const randomNumber = Math.round(Math.random() * 5000);
+    cardClone.querySelector('.box').id = `card-${randomNumber}`;
+    cardClone.querySelector('[slot="card-content"]').textContent = datas.get('content');
 
+    const cardContainer = document.querySelector(`[data-list-id='${id}'] .panel-block`);
     cardContainer.prepend(cardClone);
 
     app.hideModals();
@@ -122,7 +128,6 @@ const app = {
   // fonction d'initialisation, lancée au chargement de la page
   init() {
     app.addListenerToActions();
-    app.makeListInDOM();
   },
 };
 
