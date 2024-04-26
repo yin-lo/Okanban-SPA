@@ -254,6 +254,42 @@
       </div>
     </div>
 
+    <!-- Modal card -->
+    <div class="modal" id="addCardModal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <form action="" method="POST">
+          <header class="modal-card-head">
+            <p class="modal-card-title">Ajouter une carte</p>
+            <button
+              class="delete close"
+              type="button"
+              aria-label="close"
+            ></button>
+          </header>
+          <section class="modal-card-body">
+            <div class="field">
+              <label class="label">Nom</label>
+              <div class="control">
+                <input
+                  type="text"
+                  class="input"
+                  name="content"
+                  value=""
+                  placeholder="Nom de la carte"
+                />
+              </div>
+              <input type="hidden" name="list_id" value="" />
+            </div>
+          </section>
+          <footer class="modal-card-foot">
+            <button class="button is-success">Add card</button>
+            <button class="button close" type="button">Cancel</button>
+          </footer>
+        </form>
+      </div>
+    </div>
+
     <!-- Template list -->
     <template id="list-template">
       <div class="column is-one-quarter panel" data-list-id="">
@@ -291,6 +327,27 @@
           </div>
         </div>
         <div class="panel-block is-block has-background-light"></div>
+      </div>
+    </template>
+
+    <!-- Template card -->
+    <template id="card-template">
+      <div class="box">
+        <div class="columns">
+          <div class="column" slot="card-content"></div>
+          <div class="column is-narrow">
+            <a href="#">
+              <span class="icon is-small has-text-primary">
+                <i class="fas fa-pencil-alt"></i>
+              </span>
+            </a>
+            <a href="#">
+              <span class="icon is-small has-text-danger">
+                <i class="fas fa-trash-alt"></i>
+              </span>
+            </a>
+          </div>
+        </div>
       </div>
     </template>
 
