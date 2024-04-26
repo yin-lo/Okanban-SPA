@@ -129,33 +129,53 @@ const app = {
       if (!response.ok) {
         throw json;
       }
-
-      app.showListsInDOM(json);
+      // console.log(json);
+      json.forEach(list => {
+        app.showListsInDOM(list);
+        app.showCardsInDOM(list);
+      });
     } catch (error) {
       alert('erreur fetch');
       console.log(error);
     }
   },
 
-  showListsInDOM(json) {
+  showListsInDOM(list) {
     //* recuperer le template
     const listTemplate = document.getElementById('list-template');
 
-    json.forEach((list) => {
+    //* clone du template
+    const listClone = document.importNode(listTemplate.content, true);
+    //* optionnel ici, car on lui passe déja un id
+    listClone.querySelector('.panel').dataset.listId = list.id;
+    //* Mets à jour le titre de liste
+    listClone.querySelector('[slot="list-title"]').textContent = list.title;
+    //* recupere le container qui contient les listes
+    const listContainer = document.querySelector('.card-lists');
+
+    //? ajoute l'écouteur pour ouvrir la modal ajout de carte
+    listClone.querySelector('.icon').addEventListener('click', app.showAddCardModal);
+
+    //* ajoute la liste à la fin
+    listContainer.append(listClone);
+  },
+
+  showCardsInDOM(list) {
+    //* recuperer le template
+    const cardTemplate = document.getElementById('card-template');
+
+    list.cards.forEach((card) => {
       //* clone du template
-      const listClone = document.importNode(listTemplate.content, true);
+      const cardClone = document.importNode(cardTemplate.content, true);
       //* optionnel ici, car on lui passe déja un id
-      listClone.querySelector('.panel').dataset.listId = list.id;
-      //* Mets à jour le titre de liste
-      listClone.querySelector('[slot="list-title"]').textContent = list.title;
-      //* recupere le container qui contient les listes
-      const listContainer = document.querySelector('.card-lists');
+      cardClone.querySelector('.box').id = card.id;
+      //* Mets à jour le titre de la carte
+      cardClone.querySelector('[slot="card-content"]').textContent = card.content;
+      //* recupere le container qui contient les cartes
+      const cardContainerOfList = document.querySelector(`[data-list-id="${list.id}"] .panel-block`);
 
-      //? ajoute l'écouteur pour ouvrir la modal ajout de carte
-      listClone.querySelector('.icon').addEventListener('click', app.showAddCardModal);
-
-      //* ajoute la liste à la fin
-      listContainer.append(listClone);
+      //* ajoute la lcarte dans les listes
+      cardContainerOfList.append(cardClone);
     });
   },
 };
