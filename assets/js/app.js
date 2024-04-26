@@ -167,11 +167,13 @@ const app = {
     list.cards.forEach((card) => {
       //* clone du template
       const cardClone = document.importNode(cardTemplate.content, true);
-      //* optionnel ici, car on lui passe déja un id
+      //* on ajoute un id
       cardClone.querySelector('.box').id = card.id;
-      //* Mets à jour le titre de la carte
+      //* Met à jour le titre de la carte
       cardClone.querySelector('[slot="card-content"]').textContent = card.content;
-      //* recupere le container qui contient les cartes
+      // ajouter les couleurs
+      cardClone.querySelector('.box').style.backgroundColor = card.color;
+      //* récupère le container qui contient les cartes
       const cardContainerOfList = document.querySelector(`[data-list-id="${list.id}"] .panel-block`);
 
       //* ajoute la lcarte dans les listes
