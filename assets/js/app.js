@@ -31,15 +31,38 @@ const app = {
     });
   },
   handleAddListForm: function (event) {
+    //* stop le comportement par defaut
     event.preventDefault();
     const formData = new FormData(event.target);
     // console.log(formData.get('title'));
     //* astuce
     console.log(JSON.stringify(Object.fromEntries(formData)));
+    //* afficher la nouvelle dans le DOM
+    app.makeListInDOM(formData);
     //* ferme la modal
     app.hideModals();
     //* reset du formulaire
     event.target.reset();
+  },
+  makeListInDOM: function (datas) {
+    //* recuperer le template
+    const listTemplate = document.getElementById('list-template');
+    //* clone du template
+    const listClone = document.importNode(listTemplate.content, true);
+    console.log(listClone);
+    //* ajoute un id
+    const randomNumber = Math.round(Math.random() * 5000);
+    listClone.querySelector('.panel').id = `list-${randomNumber}`;
+    //* dataset permet d'associer des données à des élements html
+    //* optionnel ici, car on lui passe déja un id
+    listClone.querySelector('.panel').dataset.listId = `list-${randomNumber}`;
+    //* Mets à jour le titre de liste
+    listClone.querySelector('[slot="list-title"]').textContent =
+      datas.get('title');
+    //* recupere le container qui contient les listes
+    const listContainer = document.querySelector('.card-lists');
+    //* ajoute la liste à la fin
+    listContainer.append(listClone);
   },
 };
 
