@@ -17,10 +17,24 @@ const app = {
     //* submit form ajouter liste
     const formAddList = document.querySelector('#addListModal form');
     formAddList.addEventListener('submit', app.handleAddListForm);
+    //* click ajouter une carte
+    const buttonsAddCardToList = document.querySelectorAll('.panel .icon');
+    buttonsAddCardToList.forEach((buttonAddCard) => {
+      buttonAddCard.addEventListener('click', app.showAddCardModal);
+    });
+    //* submit
+    const formAddCard = document.querySelector('#addCardModal form');
+    formAddCard.addEventListener('submit', app.handleAddCardForm);
   },
   showAddListModal: function () {
     const listModal = document.getElementById('addListModal');
     listModal.classList.add('is-active');
+  },
+  showAddCardModal: function (event) {
+    const cardModal = document.getElementById('addCardModal');
+    cardModal.classList.add('is-active');
+    const listId = event.target.closest('.panel').dataset.listId; // data-list-id
+    cardModal.querySelector('input[type=hidden]').value = listId;
   },
   hideModals: function () {
     //* closest permet de récupérer le plus element parent qui match .modal
@@ -44,6 +58,14 @@ const app = {
     //* reset du formulaire
     event.target.reset();
   },
+  handleAddCardForm: function (event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const listId = formData.get('list_id');
+    app.makeCardInDOM(formData, listId);
+    app.hideModals();
+    event.target.reset();
+  },
   makeListInDOM: function (datas) {
     //* recuperer le template
     const listTemplate = document.getElementById('list-template');
@@ -61,8 +83,34 @@ const app = {
       datas.get('title');
     //* recupere le container qui contient les listes
     const listContainer = document.querySelector('.card-lists');
+
+    //? ajoute l'écouteur pour ouvrir la modal ajout de carte
+    listClone
+      .querySelector('.icon')
+      .addEventListener('click', app.showAddCardModal);
+
+    /* listClone
+      .querySelector('.icon')
+      .addEventListener('click', (event) => {
+        app.showAddCardModal(event, 'toto')
+      }); */
+
     //* ajoute la liste à la fin
     listContainer.append(listClone);
+  },
+  makeCardInDOM: function (datas, id) {
+    console.log('monter la carte');
+    const cardTemplate = document.getElementById('card-template');
+    const cardClone = document.importNode(cardTemplate.content, true);
+    const randomNumber = Math.round(Math.random() * 5000);
+    cardClone.querySelector('.box').id = `card-${randomNumber}`;
+    cardClone.querySelector('[slot="card-content"]').textContent =
+      datas.get('content');
+
+    const cardContainerOfList = document.querySelector(
+      `[data-list-id="${id}"] .panel-block`
+    );
+    cardContainerOfList.append(cardClone);
   },
 };
 
