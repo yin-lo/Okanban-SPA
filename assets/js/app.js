@@ -1,8 +1,17 @@
 // on objet qui contient des fonctions
-var app = {
+const app = {
   // fonction d'initialisation, lancée au chargement de la page
   init: function () {
     console.log('app.init !');
+    app.addListenerToActions();
+  },
+  addListenerToActions: function () {
+    const addListButton = document.getElementById('addListButton');
+    addListButton.addEventListener('click', app.showAddListModal);
+  },
+  showAddListModal: function () {
+    const listModal = document.getElementById('addListModal');
+    listModal.classList.add('is-active');
   },
 };
 
