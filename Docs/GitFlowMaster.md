@@ -38,7 +38,7 @@ On s'assure d'avoir bien sauvegardé le code de la veille :
 **A faire pour chaque journée**
 
 - S''assurer d'être bien sur la branche `master` :
-  - `git branch --show-current`
+  - `git checkout master`
 - Récupèrer le code du prof en local, sans l'intégrer à la branche courante :
   - `git fetch prof`
 - Enfin, on écrase la branche courante (`master`) par la branche `master` du dépôt `prof` :
