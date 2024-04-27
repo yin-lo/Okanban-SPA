@@ -40,12 +40,13 @@ Au passage, il faut modifier `app.makeCardInDOM` pour changer l'attribut "data-c
 ## Save it baby !
 
 Modifie les méthodes `handleAddListForm` et `handleAddCardForm` :
+
 - Ces méthodes doivent être async.
 - Utilise fetch pour appeler les routes POST en envoyant les données du formulaire.
 - Utilise la réponse de fetch pour créer les listes/cartes, ou afficher une erreur (avec `alert`) si besoin.
 - Pense à tester le code de retour avec `response.status` (il DOIT être égal à 200, sinon on a une erreur).
 
-#### pourquoi j'ai pas de données ?!
+### pourquoi j'ai pas de données ?!
 
 Tu as beau envoyer des données, rien n'apparrait côté back. C'est probablement dû au format dans lequel tu envoie les données !
 
@@ -60,14 +61,13 @@ Il faut rajouter un middleware dans l'api : [multer](https://github.com/expressj
 const multer = require('multer');
 const bodyParser = multer();
 
-// on utlise .none() pour dire qu'on attends pas de fichier, uniquement des inputs "classiques" !
+// on utlise .none() pour dire qu'on n'attend pas de fichier, uniquement des inputs "classiques" !
 app.use( bodyParser.none() );
 ```
+
 </details>
 
 ---
-
-
 
 # oKanban-front, jour 1
 
@@ -199,7 +199,7 @@ Ensuite, valider le formulaire doit ajouter une nouvelle carte dans le DOM.
 
 ### petit souci de dynamisation
 
-Tu as peut-être remarqué que si on crée une nouvelle liste, puis qu'on clique sur le "+", rien ne se passe : c'est normal, la liste a été créée _après_ que les écouteur aient été ajoutés.
+Tu as peut-être remarqué que si on crée une nouvelle liste, puis qu'on clique sur le "+", rien ne se passe : c'est normal, la liste a été créée *après* que les écouteur aient été ajoutés.
 
 Il faut donc modifier `app.makeListInDOM`, pour ajouter l'écouteur sur le bouton "+" directement au moment de la création de la nouvelle liste !
 

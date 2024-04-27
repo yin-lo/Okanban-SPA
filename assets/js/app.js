@@ -2,7 +2,7 @@
 const app = {
   // fonction d'initialisation, lancée au chargement de la page
   init: function () {
-    console.log('app.init !');
+    //console.log('app.init !');
     app.addListenerToActions();
     app.getListsFromAPI();
   },
@@ -36,6 +36,7 @@ const app = {
   showAddListModal: function () {
     const listModal = document.getElementById('addListModal');
     listModal.classList.add('is-active');
+    listModal.querySelector('[name="position"]').value = app.listNextPosition;
   },
 
   showAddCardModal: function (event) {
@@ -54,19 +55,47 @@ const app = {
     });
   },
 
-  handleAddListForm: function (event) {
+  async handleAddListForm (event) {
     //* stop le comportement par defaut
     event.preventDefault();
     const formData = new FormData(event.target);
     // console.log(formData.get('title'));
-    //* astuce
-    console.log(JSON.stringify(Object.fromEntries(formData)));
-    //* afficher la nouvelle dans le DOM
-    app.makeListInDOM(formData);
-    //* ferme la modal
+    // astuce
+    // console.log(JSON.stringify(Object.fromEntries(formData)));
+    // envoyer les infos au back
+    const newList = await app.postData('/lists', formData);
+    // afficher la nouvelle liste dans le DOM
+    if (newList) {
+      app.showListsInDOM(newList);
+      app.listNextPosition++;
+    } else {
+      alert('erreur d\'affichage');
+    }
+    // ferme la modal
     app.hideModals();
-    //* reset du formulaire
+    // reset du formulaire
     event.target.reset();
+  },
+
+  async postData(route, data) {
+    try {
+      const response = await fetch(`${app.base_url}${route}`, {
+        method: 'POST',
+        body: JSON.stringify(Object.fromEntries(data)), 
+        headers: {
+          'Content-type': 'application/json',
+          // 'Content-type': 'multipart/form-data',
+        },
+      });
+      const json = await response.json();
+      if (!response.ok) {
+        throw json;
+      }
+      return json;
+    } catch (error) {
+      // alert('erreur fetch');
+      console.log(error);
+    }
   },
 
   handleAddCardForm: function (event) {
@@ -130,6 +159,9 @@ const app = {
         throw json;
       }
       // console.log(json);
+      // on prépare pour la position de la prochaine liste
+      app.listNextPosition = json.length + 1;
+
       json.forEach(list => {
         app.showListsInDOM(list);
         app.showCardsInDOM(list);
@@ -143,7 +175,7 @@ const app = {
   showListsInDOM(list) {
     //* recuperer le template
     const listTemplate = document.getElementById('list-template');
-
+    // console.log(list);
     //* clone du template
     const listClone = document.importNode(listTemplate.content, true);
     //* optionnel ici, car on lui passe déja un id

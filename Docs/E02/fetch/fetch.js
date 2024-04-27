@@ -4,7 +4,7 @@
 
 async function getDatas() {
   try {
-    const response = await fetch('http://localhost:3000/lists');
+    const response = await fetch('http://localhost:5000/lists');
     const json = await response.json();
     if (!response.ok) {
       throw json;
@@ -34,7 +34,7 @@ async function postData(event) {
     const response = await fetch('http://localhost:3000/lists', {
       method: 'POST',
       //? Methode 1 avec formData
-    //   body: formData, // multipart/form-data
+      //   body: formData, // multipart/form-data
       //? Methode 2 avec json
       body: JSON.stringify(Object.fromEntries(formData)),
       headers: {
