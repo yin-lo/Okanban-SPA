@@ -1,4 +1,4 @@
-export const base_url = 'http://localhost:3000';
+export const base_url = 'http://localhost:5000';
 
 export function hideModals() {
   //* closest permet de récupérer le plus element parent qui match .modal

@@ -24,7 +24,7 @@ export async function handleAddCardForm(event) {
 }
 
 export function makeCardInDOM(datas) {
-  console.log('monter la carte');
+
   const cardTemplate = document.getElementById('card-template');
   const cardClone = document.importNode(cardTemplate.content, true);
 

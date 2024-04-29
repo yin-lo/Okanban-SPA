@@ -18,8 +18,8 @@ Voici ce qu'il faut mettre en place :
 
 - L'évènement pour un double click est "dblclick".
 - Pour afficher/masquer quelque chose, Bulma nous fournit la classe CSS "is-hidden".
-- Pour tout le reste, inspire toi de ce qui a été fait les jours précédents : récuperer un élément, lui ajouter un écouter, éviter le fonctionnement par défaut des events, ...
-- Et surtout, n'oublie pas de brancher toutes ces nouvelles intercations sur les éléments (listes et cartes) au moment de leur création !
+- Pour tout le reste, inspire-toi de ce qui a été fait les jours précédents : récupérer un élément, lui ajouter un écouteur, éviter le fonctionnement par défaut des events, ...
+- Et surtout, n'oublie pas de brancher toutes ces nouvelles interactions sur les éléments (listes et cartes) au moment de leur création !
 
 </details>
 
