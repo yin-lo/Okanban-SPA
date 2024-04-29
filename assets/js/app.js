@@ -41,7 +41,7 @@ const app = {
     const formAddCard = document.querySelector('#addCardModal form');
     formAddCard.addEventListener('submit', handleAddCardForm);
 
-    //* double click pour modifier titre
+    //* double click pour modifier titre de la liste
     const titleLists = document.querySelectorAll('[slot="list-title"]');
     titleLists.forEach((titleList) => {
       titleList.addEventListener('dblclick', () => {
@@ -55,6 +55,14 @@ const app = {
     const formUpdateLists = document.querySelectorAll('.panel form');
     formUpdateLists.forEach((formUpdateList) => {
       formUpdateList.addEventListener('submit', handleUpdateListForm);
+    });
+
+    //*click sur crayon pour modifier le nom de la carte
+    const nameCards = document.querySelectorAll('.fa-pencil-alt');
+    nameCards.forEach((nameCard) => {
+      nameCard.addEventListener('click', (event) => {
+
+      });
     });
   },
 };

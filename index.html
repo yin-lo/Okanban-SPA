@@ -4,15 +4,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>oKanban</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css" />
     <link rel="stylesheet" href="./assets/css/style.css" />
-    <script
-      defer
-      src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"
-    ></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
     <!-- Chargement de mon fichier JS -->
     <script defer type="module" src="./assets/js/app.js"></script>
   </head>
@@ -46,23 +40,13 @@
         <form action="" method="POST">
           <header class="modal-card-head">
             <p class="modal-card-title">Ajouter une liste</p>
-            <button
-              class="delete close"
-              type="button"
-              aria-label="close"
-            ></button>
+            <button class="delete close" type="button" aria-label="close"></button>
           </header>
           <section class="modal-card-body">
             <div class="field">
               <label class="label">Nom</label>
               <div class="control">
-                <input
-                  type="text"
-                  class="input"
-                  name="title"
-                  value=""
-                  placeholder="Nom de la liste"
-                />
+                <input type="text" class="input" name="title" value="" placeholder="Nom de la liste" />
               </div>
             </div>
           </section>
@@ -81,23 +65,13 @@
         <form action="" method="POST">
           <header class="modal-card-head">
             <p class="modal-card-title">Ajouter une carte</p>
-            <button
-              class="delete close"
-              type="button"
-              aria-label="close"
-            ></button>
+            <button class="delete close" type="button" aria-label="close"></button>
           </header>
           <section class="modal-card-body">
             <div class="field">
               <label class="label">Nom</label>
               <div class="control">
-                <input
-                  type="text"
-                  class="input"
-                  name="content"
-                  value=""
-                  placeholder="Nom de la carte"
-                />
+                <input type="text" class="input" name="content" value="" placeholder="Nom de la carte" />
               </div>
               <input type="hidden" name="list_id" value="" />
             </div>
@@ -118,18 +92,11 @@
             <div class="column">
               <h2 class="has-text-white" slot="list-title"></h2>
 
-              <form action="" method="POST" 
-              slot="formList" class="is-hidden">
+              <form action="" method="POST" slot="formList" class="is-hidden">
                 <input type="hidden" name="list-id" value="" />
                 <div class="field has-addons">
                   <div class="control">
-                    <input
-                      type="text"
-                      class="input is-small"
-                      name="list-name"
-                      value=""
-                      placeholder="Nom de la liste"
-                    />
+                    <input type="text" class="input is-small" name="list-name" value="" placeholder="Nom de la liste" />
                   </div>
                   <div class="control">
                     <button class="button is-small is-success">Valider</button>
@@ -169,6 +136,17 @@
             </a>
           </div>
         </div>
+        <form action="" method="POST" slot="formList" class="is-hidden">
+          <input type="hidden" name="list-id" value="" />
+          <div class="field has-addons">
+            <div class="control">
+              <input type="text" class="input is-small" name="list-name" value="" placeholder="Nom de la liste" />
+            </div>
+            <div class="control">
+              <button class="button is-small is-success">Valider</button>
+            </div>
+          </div>
+        </form>
       </div>
     </template>
   </body>

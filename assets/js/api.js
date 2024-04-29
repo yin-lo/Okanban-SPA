@@ -60,9 +60,11 @@ export async function patchListToApi(data) {
     if (data.get('list-name')) {
       sendData.title = data.get('list-name');
     }
+
     if (data.get('position')) {
       sendData.position = data.get('position');
     }
+    
     const response = await fetch(`${base_url}/lists/${data.get('list-id')}`, {
       method: 'PATCH',
       body: JSON.stringify(sendData),

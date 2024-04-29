@@ -1,4 +1,4 @@
-import { hideModals, base_url } from './utils.js';
+import { hideModals } from './utils.js';
 import { postCardToApi } from './api.js';
 
 export function showAddCardModal(event) {
