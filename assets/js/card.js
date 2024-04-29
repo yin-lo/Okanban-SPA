@@ -1,4 +1,5 @@
-import { postData } from "./api";
+import { hideModals } from "./utils.js";
+import { postData } from "./api.js";
 
 export function showAddCardModal(event) {
   const cardModal = document.getElementById('addCardModal');
@@ -24,7 +25,7 @@ export async function handleAddCardForm (event) {
 
   if (newCard) {
     addCard(newCard, listCardContainer);
-    app.cardNextPosition++;
+    cardNextPosition++;
   } else {
     alert('erreur d\'affichage');
   }

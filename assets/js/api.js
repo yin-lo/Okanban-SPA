@@ -1,8 +1,4 @@
-import { base_url } from "./utils";
-
-import { showListInDOM } from "./list";
-
-import { cardsOfListInDOM } from "./card";
+import { base_url } from "./utils.js";
 
 export async function getListsFromAPI() {
   try {
@@ -20,14 +16,11 @@ export async function getListsFromAPI() {
 
     // on prépare pour la position de la prochaine liste
     app.listNextPosition = json.length + 1;
+    return json;
 
-    json.forEach(list => {
-      showListInDOM(list);
-      cardsOfListInDOM(list);
-    });
   } catch (error) {
-    alert('erreur fetch');
     console.log(error);
+    return null;
   }
 }
 
@@ -49,5 +42,6 @@ export async function postData(route, data) {
   } catch (error) {
     // alert('erreur fetch');
     console.log(error);
+    return null
   }
 }

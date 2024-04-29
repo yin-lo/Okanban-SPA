@@ -1,20 +1,26 @@
-import {base_url, hideModals} from './utils.js';
+import { hideModals } from './utils.js';
 // import * as utils from './utils.js'; puis on utilise "utils.base_url" ensuite, par exemple
 
-import { showAddListModal, handleAddListForm } from './list.js';
+import { showAddListModal, handleAddListForm, showListInDOM } from './list.js';
 
-import {handleAddCardForm} from './card.js';
+import { handleAddCardForm } from './card.js';
 
-import { getListsFromAPI, postData } from './api.js';
+import { getListsFromAPI} from './api.js';
 
 // un objet qui contient des fonctions
 const app = {
-
   // fonction d'initialisation, lancée au chargement de la page
   init: function () {
     //console.log('app.init !');
     app.addListenerToActions();
-    getListsFromAPI();
+
+    const lists = getListsFromAPI();
+    if (lists) {
+      lists.forEach((list) => {
+        showListInDOM(list);
+        cardsOfListInDOM(list);
+      });
+    }
   },
 
   addListenerToActions: function () {

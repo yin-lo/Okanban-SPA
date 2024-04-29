@@ -1,4 +1,4 @@
-//import {showAddCardModal} from './list.js';
+import {showAddCardModal} from './card.js';
 
 import {hideModals} from './utils.js';
 
