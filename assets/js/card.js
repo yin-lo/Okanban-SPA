@@ -4,7 +4,7 @@ import { postCardToApi } from './api.js';
 export function showAddCardModal(event) {
   const cardModal = document.getElementById('addCardModal');
   cardModal.classList.add('is-active');
-  const listId = event.target.closest('.panel').dataset.listId; // data-list-id
+  const listId = event.target.closest('.panel').dataset.listId;
   cardModal.querySelector('input[type=hidden]').value = listId;
 }
 
@@ -24,7 +24,6 @@ export async function handleAddCardForm(event) {
 }
 
 export function makeCardInDOM(datas) {
-  console.log('monter la carte');
   const cardTemplate = document.getElementById('card-template');
   const cardClone = document.importNode(cardTemplate.content, true);
 

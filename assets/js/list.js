@@ -11,15 +11,8 @@ export async function handleAddListForm(event) {
   //* stop le comportement par defaut
   event.preventDefault();
   const formData = new FormData(event.target);
-  // console.log(formData.get('title'));
   //* astuce
   console.log(JSON.stringify(Object.fromEntries(formData)));
-
-  //* BONUS COUNT ELEMENTS
-  /* const listCounted =
-      document.querySelector('.cards-lists').childElementCount;
-    formData.append('position', listCounted + 1); */
-  //*-------------------------
 
   //* afficher la nouvelle dans le DOM
   const newList = await postListToApi(formData);
@@ -52,12 +45,6 @@ export function makeListInDOM(datas) {
 
   //? ajoute l'écouteur pour ouvrir la modal ajout de carte
   listClone.querySelector('.icon').addEventListener('click', showAddCardModal);
-
-  /* listClone
-      .querySelector('.icon')
-      .addEventListener('click', (event) => {
-        showAddCardModal(event, 'toto')
-      }); */
 
   //* ajoute la liste à la fin
   listContainer.append(listClone);
