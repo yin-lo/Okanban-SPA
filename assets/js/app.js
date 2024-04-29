@@ -22,7 +22,7 @@ const app = {
         }
       }
     } catch (error) {
-      console.log('erreur');
+      alert('Impossible de récupérer les listes');
       console.log(error);
     }
   },
@@ -61,25 +61,64 @@ const app = {
       modal.classList.remove('is-active');
     });
   },
-  handleAddListForm: function (event) {
+  handleAddListForm: async function (event) {
     //* stop le comportement par defaut
     event.preventDefault();
     const formData = new FormData(event.target);
     // console.log(formData.get('title'));
     //* astuce
     console.log(JSON.stringify(Object.fromEntries(formData)));
+
+    //* BONUS COUNT ELEMENTS
+    /* const listCounted =
+      document.querySelector('.cards-lists').childElementCount;
+    formData.append('position', listCounted + 1); */
+    //*-------------------------
+
     //* afficher la nouvelle dans le DOM
-    app.makeListInDOM(formData);
+    try {
+      const response = await fetch(`${app.base_url}/lis`, {
+        method: 'POST',
+        //* methode 1 post avec formdata
+        body: formData,
+      });
+      const json = await response.json();
+      if (!response.ok) {
+        throw json;
+      }
+      app.makeListInDOM(json);
+    } catch (error) {
+      alert("Impossible d'ajouter la liste");
+      console.log(error);
+    }
     //* ferme la modal
     app.hideModals();
     //* reset du formulaire
     event.target.reset();
   },
-  handleAddCardForm: function (event) {
+  handleAddCardForm: async function (event) {
     event.preventDefault();
     const formData = new FormData(event.target);
-    const listId = formData.get('list_id');
-    app.makeCardInDOM(formData, listId);
+
+    try {
+      const response = await fetch(`${app.base_url}/cards`, {
+        method: 'POST',
+        //* methode 2 post avec json
+        body: JSON.stringify(Object.fromEntries(formData)),
+        headers: {
+          'Content-type': 'application/json',
+        },
+      });
+      const json = await response.json();
+      if (!response.ok) {
+        throw json;
+      }
+      app.makeCardInDOM(json);
+    } catch (error) {
+      alert("Impossible d'ajouter la carte");
+      console.log(error);
+    }
+
     app.hideModals();
     event.target.reset();
   },
@@ -88,12 +127,11 @@ const app = {
     const listTemplate = document.getElementById('list-template');
     //* clone du template
     const listClone = document.importNode(listTemplate.content, true);
-    console.log(listClone);
     //* ajoute un id
     listClone.querySelector('.panel').id = `list-${datas.id}`;
     //* dataset permet d'associer des données à des élements html
     //* optionnel ici, car on lui passe déja un id
-    listClone.querySelector('.panel').dataset.listId = `list-${datas.id}`;
+    listClone.querySelector('.panel').dataset.listId = datas.id;
     //* Mets à jour le titre de liste
     listClone.querySelector('[slot="list-title"]').textContent = datas.title;
     //* recupere le container qui contient les listes
@@ -123,9 +161,8 @@ const app = {
     cardClone.querySelector('[slot="card-content"]').textContent =
       datas.content;
 
-    console.log(datas);
     const cardContainerOfList = document.querySelector(
-      `[data-list-id="list-${datas.list_id}"] .panel-block`
+      `[data-list-id="${datas.list_id}"] .panel-block`
     );
     cardContainerOfList.append(cardClone);
   },
