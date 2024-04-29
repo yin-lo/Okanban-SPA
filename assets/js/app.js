@@ -1,9 +1,27 @@
 // on objet qui contient des fonctions
 const app = {
+  base_url: 'http://localhost:3000',
   // fonction d'initialisation, lancée au chargement de la page
   init: function () {
     console.log('app.init !');
+    app.getListsFromAPI();
     app.addListenerToActions();
+  },
+  getListsFromAPI: async function () {
+    try {
+      const response = await fetch(`${app.base_url}/lists`);
+      const json = await response.json();
+      if (!response.ok) {
+        throw json;
+      }
+      console.log(json);
+      for (const list of json) {
+        app.makeListInDOM(list);
+      }
+    } catch (error) {
+      console.log('erreur');
+      console.log(error);
+    }
   },
   addListenerToActions: function () {
     //* click ouvrir list modal
@@ -17,11 +35,7 @@ const app = {
     //* submit form ajouter liste
     const formAddList = document.querySelector('#addListModal form');
     formAddList.addEventListener('submit', app.handleAddListForm);
-    //* click ajouter une carte
-    const buttonsAddCardToList = document.querySelectorAll('.panel .icon');
-    buttonsAddCardToList.forEach((buttonAddCard) => {
-      buttonAddCard.addEventListener('click', app.showAddCardModal);
-    });
+
     //* submit
     const formAddCard = document.querySelector('#addCardModal form');
     formAddCard.addEventListener('submit', app.handleAddCardForm);
@@ -73,14 +87,12 @@ const app = {
     const listClone = document.importNode(listTemplate.content, true);
     console.log(listClone);
     //* ajoute un id
-    const randomNumber = Math.round(Math.random() * 5000);
-    listClone.querySelector('.panel').id = `list-${randomNumber}`;
+    listClone.querySelector('.panel').id = `list-${datas.id}`;
     //* dataset permet d'associer des données à des élements html
     //* optionnel ici, car on lui passe déja un id
-    listClone.querySelector('.panel').dataset.listId = `list-${randomNumber}`;
+    listClone.querySelector('.panel').dataset.listId = `list-${datas.id}`;
     //* Mets à jour le titre de liste
-    listClone.querySelector('[slot="list-title"]').textContent =
-      datas.get('title');
+    listClone.querySelector('[slot="list-title"]').textContent = datas.title;
     //* recupere le container qui contient les listes
     const listContainer = document.querySelector('.card-lists');
 
