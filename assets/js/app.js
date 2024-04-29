@@ -17,6 +17,9 @@ const app = {
       console.log(json);
       for (const list of json) {
         app.makeListInDOM(list);
+        for (const card of list.cards) {
+          app.makeCardInDOM(card);
+        }
       }
     } catch (error) {
       console.log('erreur');
@@ -110,17 +113,19 @@ const app = {
     //* ajoute la liste à la fin
     listContainer.append(listClone);
   },
-  makeCardInDOM: function (datas, id) {
+  makeCardInDOM: function (datas) {
     console.log('monter la carte');
     const cardTemplate = document.getElementById('card-template');
     const cardClone = document.importNode(cardTemplate.content, true);
-    const randomNumber = Math.round(Math.random() * 5000);
-    cardClone.querySelector('.box').id = `card-${randomNumber}`;
-    cardClone.querySelector('[slot="card-content"]').textContent =
-      datas.get('content');
 
+    cardClone.querySelector('.box').id = `card-${datas.id}`;
+    cardClone.querySelector('.box').style.backgroundColor = datas.color;
+    cardClone.querySelector('[slot="card-content"]').textContent =
+      datas.content;
+
+    console.log(datas);
     const cardContainerOfList = document.querySelector(
-      `[data-list-id="${id}"] .panel-block`
+      `[data-list-id="list-${datas.list_id}"] .panel-block`
     );
     cardContainerOfList.append(cardClone);
   },
