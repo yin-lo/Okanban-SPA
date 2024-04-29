@@ -1,5 +1,8 @@
-// on objet qui contient des fonctions
+// un objet qui contient des fonctions
 const app = {
+
+  base_url: 'http://localhost:5000',
+
   // fonction d'initialisation, lancée au chargement de la page
   init: function () {
     //console.log('app.init !');
@@ -28,7 +31,7 @@ const app = {
       buttonAddCard.addEventListener('click', app.showAddCardModal);
     });
 
-    //* submit
+    //* submit form ajouter carte
     const formAddCard = document.querySelector('#addCardModal form');
     formAddCard.addEventListener('submit', app.handleAddCardForm);
   },
@@ -42,8 +45,13 @@ const app = {
   showAddCardModal: function (event) {
     const cardModal = document.getElementById('addCardModal');
     cardModal.classList.add('is-active');
-    const listId = event.target.closest('.panel').dataset.listId; // data-list-id
+
+    const list = event.target.closest('.panel');
+    const listId = list.dataset.listId; // data-list-id
     cardModal.querySelector('input[type=hidden]').value = listId;
+
+    const cardNextPosition = list.querySelectorAll('.panel-block > .box').length+1;
+    cardModal.querySelector('[name="position"]').value = cardNextPosition;
   },
 
   hideModals: function () {
@@ -59,14 +67,11 @@ const app = {
     //* stop le comportement par defaut
     event.preventDefault();
     const formData = new FormData(event.target);
-    // console.log(formData.get('title'));
-    // astuce
-    // console.log(JSON.stringify(Object.fromEntries(formData)));
     // envoyer les infos au back
     const newList = await app.postData('/lists', formData);
     // afficher la nouvelle liste dans le DOM
     if (newList) {
-      app.showListsInDOM(newList);
+      app.showListInDOM(newList);
       app.listNextPosition++;
     } else {
       alert('erreur d\'affichage');
@@ -98,56 +103,22 @@ const app = {
     }
   },
 
-  handleAddCardForm: function (event) {
+  async handleAddCardForm (event) {
     event.preventDefault();
     const formData = new FormData(event.target);
     const listId = formData.get('list_id');
-    app.makeCardInDOM(formData, listId);
+    const listCardContainer = document.querySelector(`.panel[data-list-id="${listId}"] .panel-block`);
+    const newCard = await app.postData('/cards', formData);
+
+    if (newCard) {
+      app.addCard(newCard, listCardContainer);
+      app.cardNextPosition++;
+    }else {
+      alert('erreur d\'affichage');
+    }
     app.hideModals();
     event.target.reset();
   },
-
-  makeListInDOM: function (datas) {
-    //* recuperer le template
-    const listTemplate = document.getElementById('list-template');
-    //* clone du template
-    const listClone = document.importNode(listTemplate.content, true);
-    // console.log(listClone);
-
-    //* dataset permet d'associer des données à des élements html
-    //* optionnel ici, car on lui passe déja un id
-    listClone.querySelector('.panel').dataset.listId = 'list_id';
-    //* Mets à jour le titre de liste
-    listClone.querySelector('[slot="list-title"]').textContent = datas.get('title');
-    //* recupere le container qui contient les listes
-    const listContainer = document.querySelector('.card-lists');
-
-    //? ajoute l'écouteur pour ouvrir la modal ajout de carte
-    listClone.querySelector('.icon').addEventListener('click', app.showAddCardModal);
-
-    /* listClone
-      .querySelector('.icon')
-      .addEventListener('click', (event) => {
-        app.showAddCardModal(event, 'toto')
-      }); */
-
-    //* ajoute la liste à la fin
-    listContainer.append(listClone);
-  },
-
-  makeCardInDOM: function (datas, id) {
-    console.log('monter la carte');
-    const cardTemplate = document.getElementById('card-template');
-    const cardClone = document.importNode(cardTemplate.content, true);
-    const randomNumber = Math.round(Math.random() * 5000);
-    cardClone.querySelector('.box').id = `card-${randomNumber}`;
-    cardClone.querySelector('[slot="card-content"]').textContent = datas.get('content');
-
-    const cardContainerOfList = document.querySelector(`[data-list-id="${id}"] .panel-block`);
-    cardContainerOfList.append(cardClone);
-  },
-
-  base_url: 'http://localhost:5000',
 
   async getListsFromAPI() {
     try {
@@ -163,8 +134,8 @@ const app = {
       app.listNextPosition = json.length + 1;
 
       json.forEach(list => {
-        app.showListsInDOM(list);
-        app.showCardsInDOM(list);
+        app.showListInDOM(list);
+        app.cardsOfListInDOM(list);
       });
     } catch (error) {
       alert('erreur fetch');
@@ -172,13 +143,13 @@ const app = {
     }
   },
 
-  showListsInDOM(list) {
+  showListInDOM(list) {
     //* recuperer le template
     const listTemplate = document.getElementById('list-template');
     // console.log(list);
     //* clone du template
     const listClone = document.importNode(listTemplate.content, true);
-    //* optionnel ici, car on lui passe déja un id
+    //* on lui passe un id
     listClone.querySelector('.panel').dataset.listId = list.id;
     //* Mets à jour le titre de liste
     listClone.querySelector('[slot="list-title"]').textContent = list.title;
@@ -192,26 +163,29 @@ const app = {
     listContainer.append(listClone);
   },
 
-  showCardsInDOM(list) {
-    //* recuperer le template
-    const cardTemplate = document.getElementById('card-template');
+  cardsOfListInDOM(list) {
+    //* récupère le container qui contient les cartes
+    const cardContainerOfList = document.querySelector(`[data-list-id="${list.id}"] .panel-block`);
 
     list.cards.forEach((card) => {
-      //* clone du template
-      const cardClone = document.importNode(cardTemplate.content, true);
-      //* on ajoute un id
-      cardClone.querySelector('.box').id = card.id;
-      //* Met à jour le titre de la carte
-      cardClone.querySelector('[slot="card-content"]').textContent = card.content;
-      // ajouter les couleurs
-      cardClone.querySelector('.box').style.backgroundColor = card.color;
-      //* récupère le container qui contient les cartes
-      const cardContainerOfList = document.querySelector(`[data-list-id="${list.id}"] .panel-block`);
-
-      //* ajoute la lcarte dans les listes
-      cardContainerOfList.append(cardClone);
+      app.addCard(card, cardContainerOfList);
     });
   },
+
+  addCard(card, container) {
+    //* recuperer le template
+    const cardTemplate = document.getElementById('card-template');
+    //* clone du template
+    const cardClone = document.importNode(cardTemplate.content, true);
+    //* on ajoute un id
+    cardClone.querySelector('.box').id = card.id;
+    //* Met à jour le titre de la carte
+    cardClone.querySelector('[slot="card-content"]').textContent = card.content;
+    // ajouter les couleurs
+    cardClone.querySelector('.box').style.backgroundColor = card.color;
+    //* ajoute la carte dans les listes
+    container.append(cardClone);
+  }
 };
 
 // on accroche un écouteur d'évènement sur le document : quand le chargement est terminé, on lance app.init
