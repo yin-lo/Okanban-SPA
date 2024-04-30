@@ -1,6 +1,6 @@
 import { showAddCardModal } from './card.js';
 import { hideModals, base_url } from './utils.js';
-import { postListToApi } from './api.js';
+import { postListToApi, editListInAPI } from './api.js';
 
 export function showAddListModal() {
   const listModal = document.getElementById('addListModal');
@@ -46,6 +46,40 @@ export function makeListInDOM(datas) {
   //? ajoute l'écouteur pour ouvrir la modal ajout de carte
   listClone.querySelector('.icon').addEventListener('click', showAddCardModal);
 
+  //? click pour editer le titre
+  listClone
+    .querySelector('[slot="list-title"]')
+    .addEventListener('dblclick', showEditForm);
+
+  //? submit edit form
+  listClone.querySelector('form').addEventListener('submit', (event) => {
+    handleEditList(event, datas.id);
+  });
+
   //* ajoute la liste à la fin
   listContainer.append(listClone);
+}
+
+function showEditForm(event) {
+  const form = event.target.nextElementSibling;
+  form.classList.toggle('is-hidden');
+}
+
+async function handleEditList(event, id) {
+  event.preventDefault();
+  const formData = new FormData(event.target);
+  console.log(JSON.stringify(Object.fromEntries(formData)));
+  console.log('id de la liste', id);
+
+  //* appel api pour edit coté back
+  const editedList = await editListInAPI(formData, id);
+  if (editedList) {
+    //* met à jour le titre de la liste DANS LE DOM
+    console.log(editedList);
+    event.target.previousElementSibling.textContent = editedList.title;
+  } else {
+    alert('Impossible de modifier la liste');
+  }
+  event.target.classList.add('is-hidden');
+  event.target.reset();
 }

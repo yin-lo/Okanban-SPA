@@ -53,3 +53,20 @@ export async function postCardToApi(dataFromForm) {
     return null;
   }
 }
+
+export async function editListInAPI(bodyData, listId) {
+  try {
+    const response = await fetch(`${base_url}/lists/${listId}`, {
+      method: 'PATCH',
+      body: bodyData,
+    });
+    const json = await response.json();
+    if (!response.ok) {
+      throw json;
+    }
+    return json;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
