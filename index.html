@@ -90,16 +90,22 @@
     <!-- Template list -->
     <template id="list-template">
       <div class="column is-one-quarter panel" data-list-id="">
-        <div class="panel-heading has-background-info">
+        <div class="panel-heading has-background-link p-3">
           <div class="columns">
             <div class="column">
-              <h2 class="has-text-white" slot="list-title"></h2>
+              <h2 class="is-link button is-size-5" slot="list-title"></h2>
 
-              <form action="" method="POST" slot="formList" class="is-hidden">
-               <!--  <input type="hidden" name="list-id" value="" /> -->
+              <form action="" method="POST" class="is-hidden">
+                <!-- <input type="hidden" name="list-id" value="1" /> -->
                 <div class="field has-addons">
                   <div class="control">
-                    <input type="text" class="input is-small" name="title" value="" placeholder="Nom de la liste" />
+                    <input
+                      type="text"
+                      class="input is-small"
+                      name="title"
+                      value=""
+                      placeholder="Nom de la liste"
+                    />
                   </div>
                   <div class="control">
                     <button class="button is-small is-success">Valider</button>
@@ -110,7 +116,10 @@
 
             <div class="column is-narrow is-flex is-align-self-center">
               <a href="#">
-                <span class="icon is-small has-text-white mr-5" slot="icon-delete">
+                <span
+                  class="icon is-small has-text-white mr-5"
+                  slot="icon-delete"
+                >
                   <i class="fas fa-trash-alt"></i>
                 </span>
               </a>
@@ -131,30 +140,39 @@
       <div class="box">
         <div class="columns">
           <div class="column" slot="card-content"></div>
-          <div class="column is-narrow">
-            <a href="#">
-              <span class="icon is-small has-text-primary">
+          <form action="" method="POST" class="column is-hidden">
+            <div class="field has-addons">
+              <div class="control">
+                <input
+                  type="text"
+                  class="input is-small"
+                  name="content"
+                  value=""
+                  placeholder="Nom de la carte"
+                />
+              </div>
+            </div>
+            <div class="field">
+              <input type="color" id="card" name="color" value="#e66465" />
+            </div>
+            <div class="control">
+              <button class="button is-small is-success">Valider</button>
+            </div>
+          </form>
+
+          <div class="column is-narrow columns is-vcentered">
+            <a href="#" class="column">
+              <span class="icon is-small has-text-primary" slot="icon-edit">
                 <i class="fas fa-pencil-alt"></i>
               </span>
             </a>
-            <a href="#">
-              <span class="icon is-small has-text-danger">
+            <a href="#" class="column">
+              <span class="icon is-small has-text-danger" slot="icon-delete">
                 <i class="fas fa-trash-alt"></i>
               </span>
             </a>
           </div>
         </div>
-        <form action="" method="POST" slot="formList" class="is-hidden">
-          <input type="hidden" name="list-id" value="" />
-          <div class="field has-addons">
-            <div class="control">
-              <input type="text" class="input is-small" name="list-name" value="" placeholder="Nom de la liste" />
-            </div>
-            <div class="control">
-              <button class="button is-small is-success">Valider</button>
-            </div>
-          </div>
-        </form>
       </div>
     </template>
   </body>
