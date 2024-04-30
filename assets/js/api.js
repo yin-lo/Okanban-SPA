@@ -70,3 +70,19 @@ export async function editListInAPI(bodyData, listId) {
     return null;
   }
 }
+
+export async function deleteListInApi(listId) {
+  try {
+    const response = await fetch(`${base_url}/lists/${listId}`, {
+      method: 'DELETE',
+    });
+    const json = await response.json();
+    if (!response.ok) {
+      throw json;
+    }
+    return json;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
