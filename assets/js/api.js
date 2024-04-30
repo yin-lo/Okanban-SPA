@@ -107,3 +107,19 @@ export async function editCardInAPI(bodyData, cardId) {
     return null;
   }
 }
+
+export async function deleteCardInAPI(cardId) {
+  try {
+    const response = await fetch(`${base_url}/cards/${cardId}`, {
+      method: 'DELETE',
+    });
+    // le back ne renvoie pas de body donc on modifie un peu pour ne pas rendre de JSON
+    if (!response.ok) {
+      throw new Error('suppression impossible');
+    }
+    return true;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
