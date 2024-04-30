@@ -68,24 +68,39 @@
         <form action="" method="POST">
           <header class="modal-card-head">
             <p class="modal-card-title">Ajouter une carte</p>
-            <button class="delete close" type="button" aria-label="close"></button>
+            <button
+              class="delete close"
+              type="button"
+              aria-label="close"
+            ></button>
           </header>
           <section class="modal-card-body">
             <div class="field">
               <label class="label">Nom</label>
               <div class="control">
-                <input type="text" class="input" name="content" value="" placeholder="Nom de la carte" />
+                <input
+                  type="text"
+                  class="input"
+                  name="content"
+                  value=""
+                  placeholder="Nom de la carte"
+                />
+              </div>
+              <div class="field">
+                <label for="color">Couleur</label>
+                <input type="color" id="color" name="color" value="#e66465" />
               </div>
               <input type="hidden" name="list_id" value="" />
             </div>
           </section>
           <footer class="modal-card-foot">
-            <button class="button is-success">Add card</button>
-            <button class="button close" type="button">Cancel</button>
+            <button class="button is-success mr-2">Ajouter carte</button>
+            <button class="button close" type="button">Annuler</button>
           </footer>
         </form>
       </div>
     </div>
+
 
     <!-- Template list -->
     <template id="list-template">

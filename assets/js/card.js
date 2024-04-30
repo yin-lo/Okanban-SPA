@@ -87,6 +87,9 @@ async function handleEditCard(event, cardId) {
 function editCardInDom(cardContent, data) {
   cardContent.classList.remove('is-hidden');
   cardContent.textContent = data.content;
+
+  // pour changer la couleur dans le dom
+  cardContent.closest('.box').style.backgroundColor = data.color;
 }
 
 function showEditCard(event) {
@@ -94,9 +97,13 @@ function showEditCard(event) {
   const card = event.target.closest('.box');
   const form = card.querySelector('form');
   form.classList.toggle('is-hidden');
+
   // cacher le titre actuel
   const cardContent = card.querySelector('[slot="card-content"]');
   cardContent.classList.toggle('is-hidden');
+
   // placeholder = nom carte actuel
   form.querySelector('input[name="content"]').value = cardContent.textContent;
+
+  //TODO  transformer la couleur rgb en hexa et la mettre par défaut avec la couleur actuelle
 }
