@@ -1,6 +1,6 @@
 import { showAddCardModal } from './card.js';
 import { hideModals } from './utils.js';
-import { editListInAPI, postListToApi, deleteListInAPI } from './api.js';
+import { editListInAPI, postListToApi, deleteListInApi } from './api.js';
 
 export function showAddListModal() {
   const listModal = document.getElementById('addListModal');
