@@ -1,5 +1,5 @@
 import { hideModals, base_url } from './utils.js';
-import { postCardToApi, editCardInAPI } from './api.js';
+import { postCardToApi, editCardInAPI, deleteCardInAPI } from './api.js';
 
 export function showAddCardModal(event) {
   const cardModal = document.getElementById('addCardModal');
@@ -31,7 +31,14 @@ export function makeCardInDOM(datas) {
   cardClone.querySelector('.box').style.backgroundColor = datas.color;
   cardClone.querySelector('[slot="card-content"]').textContent = datas.content;
 
-  //? cilck pour edit carte
+  //? click pour delete carte
+  cardClone
+    .querySelector('[slot="icon-delete"]')
+    .addEventListener('click', (event) => {
+      handleDeleteCard(event, datas.id);
+    });
+
+  //? click pour edit carte
   cardClone
     .querySelector('[slot="icon-edit"]')
     .addEventListener('click', showEditCard);
@@ -45,6 +52,25 @@ export function makeCardInDOM(datas) {
     `[data-list-id="${datas.list_id}"] .panel-block`
   );
   cardContainerOfList.append(cardClone);
+}
+
+async function handleDeleteCard(event, id) {
+  const isConfirmed = confirm('Etes-vous sûr de vouloir supprimer la carte ?');
+  if (isConfirmed) {
+    //* supprime la carte coté api
+    const result = await deleteCardInAPI(id);
+    if (result) {
+      //* supprime la carte du dom
+      deleteCardFromDom(id);
+    } else {
+      alert('Impossible de supprimer la carte');
+    }
+  }
+}
+
+function deleteCardFromDom(cardId) {
+  const card = document.getElementById('card-' + cardId);
+  card.remove();
 }
 
 async function handleEditCard(event, cardId) {
