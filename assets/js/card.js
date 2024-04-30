@@ -1,4 +1,4 @@
-import { hideModals, base_url } from './utils.js';
+import { hideModals, base_url, rgbToHex } from './utils.js';
 import { postCardToApi, editCardInAPI, deleteCardInAPI } from './api.js';
 
 export function showAddCardModal(event) {
@@ -111,8 +111,11 @@ function showEditCard(event) {
   const cardContent = card.querySelector('[slot="card-content"]');
   cardContent.classList.toggle('is-hidden');
 
-  //? TODO
-  //? le color doit prendre la couleur de la carte actuelle
+  //! bonus couleur avec utils => rgbToHex function
+  form.querySelector('input[name="color"]').value = rgbToHex(
+    card.style.backgroundColor
+  );
+  //! ----------------
 
   form.querySelector('input[name="content"]').value = cardContent.textContent;
 }

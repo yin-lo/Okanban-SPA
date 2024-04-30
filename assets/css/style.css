@@ -14,3 +14,10 @@ body {
   border: 1px solid grey;
 }
 
+#addCardModal input[type='color'] {
+  width: 100%;
+}
+
+.box input[type='color'] {
+  width: 100%;
+}
