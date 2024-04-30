@@ -86,3 +86,20 @@ export async function deleteListInApi(listId) {
     return null;
   }
 }
+
+export async function editCardInAPI(bodyData, cardId) {
+  try {
+    const response = await fetch(`${base_url}/cards/${cardId}`, {
+      method: 'PATCH',
+      body: bodyData,
+    });
+    const json = await response.json();
+    if (!response.ok) {
+      throw json;
+    }
+    return json;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
