@@ -1,6 +1,6 @@
 import { showAddCardModal } from './card.js';
 import { hideModals } from './utils.js';
-import { editListInAPI, postListToApi } from './api.js';
+import { editListInAPI, postListToApi, deleteListInAPI } from './api.js';
 
 export function showAddListModal() {
   const listModal = document.getElementById('addListModal');
@@ -44,7 +44,16 @@ export function makeListInDOM(datas) {
   const listContainer = document.querySelector('.card-lists');
 
   //? ajoute l'écouteur pour ouvrir la modal ajout de carte
-  listClone.querySelector('.icon').addEventListener('click', showAddCardModal);
+  listClone
+    .querySelector('[slot="icon-add"]')
+    .addEventListener('click', showAddCardModal);
+
+  //? click pour delete list
+  listClone
+    .querySelector('[slot="icon-delete"]')
+    .addEventListener('click', (event) => {
+      handleDeleteList(event, datas.id);
+    });
 
   //? click pour editer le titre
   listClone
@@ -60,25 +69,47 @@ export function makeListInDOM(datas) {
   listContainer.append(listClone);
 }
 
-
 // on affiche/cache le formulaire pour editer le titre de la liste
 function showEditForm(event) {
   const form = event.target.nextElementSibling;
   form.classList.toggle('is-hidden');
 }
 
+// on supprime la liste
+async function handleDeleteList(event, listId) {
+  const isConfirm = confirm('Etes-vous sûr de vouloir supprimer la liste ?');
+  if (isConfirm) {
+    //* supprime la liste du back
+    const deleteConfirm = await deleteListInApi(listId);
+    if (deleteConfirm) {
+      //* supprime la liste du DOM
+      removeListFromDom(listId);
+    } else {
+      alert('Impossible de supprimer la liste');
+    }
+  }
+}
+
+function removeListFromDom(id) {
+  const list = document.getElementById('list-' + id);
+  list.remove();
+}
+
 // on prépare pour envoyer les modifs au back
 async function handleEditList(event, id) {
   event.preventDefault();
   const formData = new FormData(event.target);
+  console.log(JSON.stringify(Object.fromEntries(formData)));
+  console.log('id de la liste', id);
 
+  //* appel api pour edit coté back
   const editedList = await editListInAPI(formData, id);
   if (editedList) {
-    // mettre à jour le titre dans le DOM
+    //* met à jour le titre de la liste DANS LE DOM
     console.log(editedList);
     event.target.previousElementSibling.textContent = editedList.title;
   } else {
-    alert('impossible de modifier la liste');
+    alert('Impossible de modifier la liste');
   }
   event.target.classList.add('is-hidden');
   event.target.reset();
