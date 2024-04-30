@@ -12,6 +12,8 @@ export async function handleAddCardForm(event) {
   event.preventDefault();
   const formData = new FormData(event.target);
 
+  console.log(JSON.stringify(Object.fromEntries(formData)));
+
   const newCard = await postCardToApi(formData);
   if (newCard) {
     makeCardInDOM(newCard);
@@ -97,6 +99,8 @@ async function handleEditCard(event, cardId) {
 function editCardInDom(cardContent, data) {
   cardContent.classList.remove('is-hidden');
   cardContent.textContent = data.content;
+  //! pour changer la couleur dans le dom
+  cardContent.closest('.box').style.backgroundColor = data.color;
 }
 
 function showEditCard(event) {
@@ -106,6 +110,9 @@ function showEditCard(event) {
 
   const cardContent = card.querySelector('[slot="card-content"]');
   cardContent.classList.toggle('is-hidden');
+
+  //? TODO
+  //? le color doit prendre la couleur de la carte actuelle
 
   form.querySelector('input[name="content"]').value = cardContent.textContent;
 }
