@@ -5,3 +5,12 @@ body {
 .card-lists {
   overflow-x: auto;
 }
+
+.panel:not(:last-child) {
+  margin-bottom: 0px;
+}
+
+.box {
+  border: 1px solid grey;
+}
+

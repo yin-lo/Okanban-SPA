@@ -6,7 +6,7 @@
     <title>oKanban</title>
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css"
+      href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css"
     />
     <link rel="stylesheet" href="./assets/css/style.css" />
     <script
@@ -67,8 +67,8 @@
             </div>
           </section>
           <footer class="modal-card-foot">
-            <button class="button is-success">Save changes</button>
-            <button class="button close" type="button">Cancel</button>
+            <button class="button is-success mr-2">Ajouter liste</button>
+            <button class="button close" type="button">Annuler</button>
           </footer>
         </form>
       </div>
@@ -103,8 +103,8 @@
             </div>
           </section>
           <footer class="modal-card-foot">
-            <button class="button is-success">Add card</button>
-            <button class="button close" type="button">Cancel</button>
+            <button class="button is-success mr-2">Ajouter carte</button>
+            <button class="button close" type="button">Annuler</button>
           </footer>
         </form>
       </div>
@@ -113,10 +113,10 @@
     <!-- Template list -->
     <template id="list-template">
       <div class="column is-one-quarter panel" data-list-id="">
-        <div class="panel-heading has-background-info">
+        <div class="panel-heading has-background-link p-3">
           <div class="columns">
             <div class="column">
-              <h2 class="has-text-white" slot="list-title"></h2>
+              <h2 class="is-link button is-size-5" slot="list-title"></h2>
 
               <form action="" method="POST" class="is-hidden">
                 <input type="hidden" name="list-id" value="1" />
@@ -137,7 +137,7 @@
               </form>
             </div>
 
-            <div class="column is-narrow">
+            <div class="column is-narrow is-flex is-align-self-center">
               <a href="#" class="is-pulled-right">
                 <span class="icon is-small has-text-white">
                   <i class="fas fa-plus"></i>
