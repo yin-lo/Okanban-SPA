@@ -1,5 +1,5 @@
 import { hideModals } from './utils.js';
-import { showAddListModal, handleAddListForm, makeListInDOM, showFormUpdateTitle, handleUpdateListForm } from './list.js';
+import { showAddListModal, handleAddListForm, makeListInDOM } from './list.js';
 import { handleAddCardForm, makeCardInDOM } from './card.js';
 import { getListsFromAPI } from './api.js';
 
@@ -40,30 +40,6 @@ const app = {
     //* submit
     const formAddCard = document.querySelector('#addCardModal form');
     formAddCard.addEventListener('submit', handleAddCardForm);
-
-    //* double click pour modifier titre de la liste
-    const titleLists = document.querySelectorAll('[slot="list-title"]');
-    titleLists.forEach((titleList) => {
-      titleList.addEventListener('dblclick', () => {
-        const list = titleList.closest('.panel');
-        const listId = list.dataset.listId;
-        showFormUpdateTitle(listId);
-      });
-    });
-
-    //* submit form : modifier le titre de la liste
-    const formUpdateLists = document.querySelectorAll('.panel form');
-    formUpdateLists.forEach((formUpdateList) => {
-      formUpdateList.addEventListener('submit', handleUpdateListForm);
-    });
-
-    //*click sur crayon pour modifier le nom de la carte
-    const nameCards = document.querySelectorAll('.fa-pencil-alt');
-    nameCards.forEach((nameCard) => {
-      nameCard.addEventListener('click', (event) => {
-
-      });
-    });
   },
 };
 

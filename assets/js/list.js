@@ -1,6 +1,6 @@
 import { showAddCardModal } from './card.js';
 import { hideModals } from './utils.js';
-import { patchListToApi, postListToApi } from './api.js';
+import { editListInAPI, postListToApi } from './api.js';
 
 export function showAddListModal() {
   const listModal = document.getElementById('addListModal');
@@ -11,15 +11,8 @@ export async function handleAddListForm(event) {
   //* stop le comportement par defaut
   event.preventDefault();
   const formData = new FormData(event.target);
-  // console.log(formData.get('title'));
   //* astuce
   console.log(JSON.stringify(Object.fromEntries(formData)));
-
-  //* BONUS COUNT ELEMENTS
-  /* const listCounted =
-      document.querySelector('.cards-lists').childElementCount;
-    formData.append('position', listCounted + 1); */
-  //*-------------------------
 
   //* afficher la nouvelle dans le DOM
   const newList = await postListToApi(formData);
@@ -45,76 +38,48 @@ export function makeListInDOM(datas) {
   //* dataset permet d'associer des données à des élements html
   //* optionnel ici, car on lui passe déja un id
   listClone.querySelector('.panel').dataset.listId = datas.id;
-  
-  // on met l'id aussi dans le form caché
-  listClone.querySelector('.panel form [name="list-id"]').value = datas.id;
-
-  // on met le nom de la liste actuelle dans l'attribut name
-  listClone.querySelector('.panel form [name="list-name"]').value = datas.title;
-
   //* Mets à jour le titre de liste
   listClone.querySelector('[slot="list-title"]').textContent = datas.title;
   //* recupere le container qui contient les listes
   const listContainer = document.querySelector('.card-lists');
 
-  // ajoute l'écouteur pour ouvrir la modal ajout de carte
+  //? ajoute l'écouteur pour ouvrir la modal ajout de carte
   listClone.querySelector('.icon').addEventListener('click', showAddCardModal);
 
-  /* listClone
-      .querySelector('.icon')
-      .addEventListener('click', (event) => {
-        showAddCardModal(event, 'toto')
-      }); */
+  //? click pour editer le titre
+  listClone
+    .querySelector('[slot="list-title"]')
+    .addEventListener('dblclick', showEditForm);
+
+  //? submit edit form
+  listClone.querySelector('form').addEventListener('submit', (event) => {
+    handleEditList(event, datas.id);
+  });
 
   //* ajoute la liste à la fin
   listContainer.append(listClone);
 }
 
-export function showFormUpdateTitle(listId) {
-  // relier l'id du template dans le formulaire
-  const divList = document.querySelector(`[data-list-id="${listId}"]`);
 
-  // on enlève le H2
-  const hideTitle = divList.querySelector('[slot="list-title"]');
-  hideTitle.classList.add('is-hidden');
-
-  // on affiche le formulaire
-  const showForm = divList.querySelector('[slot="formList"]');
-  showForm.classList.remove('is-hidden');
+// on affiche/cache le formulaire pour editer le titre de la liste
+function showEditForm(event) {
+  const form = event.target.nextElementSibling;
+  form.classList.toggle('is-hidden');
 }
 
-export async function handleUpdateListForm(event) {
-  //stop le comportement par defaut
+// on prépare pour envoyer les modifs au back
+async function handleEditList(event, id) {
   event.preventDefault();
   const formData = new FormData(event.target);
 
-  // console.log(JSON.stringify(Object.fromEntries(formData)));
-
-  const newDataList = await patchListToApi(formData);
-  if (newDataList) {
-    updateListInDOM(newDataList);
+  const editedList = await editListInAPI(formData, id);
+  if (editedList) {
+    // mettre à jour le titre dans le DOM
+    console.log(editedList);
+    event.target.previousElementSibling.textContent = editedList.title;
   } else {
-    alert('impossible de mettre à jour le nom de cette liste');
+    alert('impossible de modifier la liste');
   }
-  // fermer le formulaire et réafficher le h2
-  hideFormUpdateTitle (newDataList.id);
-}
-
-export function updateListInDOM(dataList) {
-  // mettre à jour les données de la liste (front)
-  const listTitle = document.querySelector(`[data-list-id="${dataList.id}"] [slot="list-title"]`);
-  listTitle.textContent = dataList.title;
-}
-
-const hideFormUpdateTitle = (listId) => {
-  // relier l'id du template dans le formulaire
-  const divList = document.querySelector(`[data-list-id="${listId}"]`);
-
-  // on remet le H2
-  const hideTitle = divList.querySelector('[slot="list-title"]');
-  hideTitle.classList.remove('is-hidden');
-
-  // on cache le formulaire
-  const showForm = divList.querySelector('[slot="formList"]');
-  showForm.classList.add('is-hidden');
+  event.target.classList.add('is-hidden');
+  event.target.reset();
 }
