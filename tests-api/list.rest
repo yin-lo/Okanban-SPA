@@ -18,7 +18,7 @@ content-type: application/json
 x-auth-token: a06979dc431a1b403052be37c0f1e461b59075129c0c38ff1e0aa373a601f55257ca6ff8be07eca7c6154a28b1661bf85c24ef2ee8ae1fa252ce1f5b611dfaa4
 
 {
-    "title": "Une liste",
+    "title": "Un liste",
     "position": 8
 
 }

@@ -26,7 +26,7 @@ const cardController = {
     },
 
     async show(req, res) {
-        // Validation (bonus) sur l'ID (histoire de dire qu'on en fait des caisses)
+        // Validation (bonus) sur l'ID (histoire de dire qu'on n'en fait des caisses)
         const { error } = Joi.number()
             .integer()
             .greater(0)
@@ -41,9 +41,7 @@ const cardController = {
         const cardId = parseInt(req.params.id);
 
         // Récupérer la carte en BDD (avec potentiellement ses tags)
-        const card = await Card.findByPk(cardId, {
-            include: 'tags',
-        });
+        const card = await Card.findByPk(cardId);
 
         // Si la carte n'existe pas (ID=90000 => null) ==> 404
         if (!card) {
@@ -104,7 +102,7 @@ const cardController = {
                 .json({ error: 'The provided list_id does not exist' });
         }
 
-        // On crée la carte
+        // On créer la carte
         const createdCard = await Card.create({
             content,
             list_id,
@@ -119,7 +117,6 @@ const cardController = {
     async update(req, res) {
         // Récupérer l'ID de la carte à update
         const cardId = parseInt(req.params.id);
-        //console.log(cardId);
 
         // Valider cet ID
         if (!Number.isInteger(cardId)) {

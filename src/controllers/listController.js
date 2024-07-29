@@ -43,8 +43,7 @@ const listController = {
 
     async store(req, res) {
         // On doit valider les données qui viennent du client : on ne fait jamais confiance à ce qui vient du client, on n'utilisa pas req.body directement
-        // Idéalement, on validerait req.body dans un middleware
- 
+        // Idéalement, on validerai req.body dans un middleware
         let { title, position } = req.body;
 
         if (!title || typeof title !== 'string') {
